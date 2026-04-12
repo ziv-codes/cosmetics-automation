@@ -771,7 +771,9 @@ def extract_sheet1_fields(data_list):
             'importTrack': item.get('importTrack', ''),
             'rpCorporation': item.get('rpCorporation', ''),
             'manufacturer': item.get('manufacturer', ''),
-            'importer': item.get('importer', '')
+            'importer': item.get('importer', ''),
+            'firstDate': item.get('firstDate', ''),
+            'lastDate': item.get('lastDate', '')   
         })
     return result
 
@@ -934,8 +936,8 @@ def create_google_sheet_example(use_sample_data=True, spreadsheet_id=None):
         # Extract required columns
         sheet1_data = extract_sheet1_fields(data_sheet1)
         
-        # Headers in order: notificationCode, importTrack, rpCorporation, manufacturer, importer
-        headers1 = ['nameCosmeticHeb', 'nameCosmeticEng', 'notificationCode', 'importTrack', 'rpCorporation', 'manufacturer', 'importer']
+        # Headers in order: notificationCode, importTrack, rpCorporation, manufacturer, importer, firstDate, lastDate
+        headers1 = ['nameCosmeticHeb', 'nameCosmeticEng', 'notificationCode', 'importTrack', 'rpCorporation', 'manufacturer', 'importer', 'firstDate', 'lastDate']
         
         # Prepare all rows for batch write
         all_rows = [headers1]  # Header row
@@ -947,9 +949,13 @@ def create_google_sheet_example(use_sample_data=True, spreadsheet_id=None):
                 item.get('importTrack', ''),
                 item.get('rpCorporation', ''),
                 item.get('manufacturer', ''),
-                item.get('importer', '')
+                item.get('importer', ''),
+                item.get('firstDate', ''),  # ADDED
+                item.get('lastDate', '')    # ADDED
             ]
             all_rows.append(row)
+        
+        
         
         # Write batch to avoid rate limit
         batch_size = SHEETS_BATCH_SIZE
@@ -1234,7 +1240,7 @@ def update_existing_sheet(spreadsheet_id=None):
         sheet1_data = extract_sheet1_fields(data_sheet1)
         
         # Prepare all rows for batch write
-        headers1 = ['nameCosmeticHeb', 'nameCosmeticEng', 'notificationCode', 'importTrack', 'rpCorporation', 'manufacturer', 'importer']
+        headers1 = ['nameCosmeticHeb', 'nameCosmeticEng', 'notificationCode', 'importTrack', 'rpCorporation', 'manufacturer', 'importer', 'firstDate', 'lastDate']
         all_rows = [headers1]  # Header row
         for item in sheet1_data:
             row = [
@@ -1244,10 +1250,16 @@ def update_existing_sheet(spreadsheet_id=None):
                 item.get('importTrack', ''),
                 item.get('rpCorporation', ''),
                 item.get('manufacturer', ''),
-                item.get('importer', '')
+                item.get('importer', ''),
+                item.get('firstDate', ''),  # ADDED
+                item.get('lastDate', '')    # ADDED
             ]
             all_rows.append(row)
-        
+
+
+
+
+
         # Clear old data first
         print(f"  Clearing old data from Sheet 1...")
         worksheet1.clear()
