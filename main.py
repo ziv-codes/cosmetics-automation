@@ -55,6 +55,22 @@ else:
     logger = logging.getLogger(__name__)
     logger.addHandler(logging.NullHandler())
 
+
+# ==================== Formatting FUNCTIONS ====================
+
+def format_api_date(date_str):
+    # Converts "2022-07-17T00:00:00" to "17-07-2022"
+    if not date_str:
+        return ""
+    try:
+        if 'T' in str(date_str):
+            dt_part = str(date_str).split('T')[0]
+            dt = datetime.strptime(dt_part, "%Y-%m-%d")
+            return dt.strftime("%d-%m-%Y")
+        return str(date_str)
+    except Exception:
+        return str(date_str) # Fallback to original if parsing fails
+
 # ==================== API FUNCTIONS ====================
 
 def get_api_data_sheet1(max_result=100, page_number=1, retry_count=0):
@@ -772,8 +788,8 @@ def extract_sheet1_fields(data_list):
             'rpCorporation': item.get('rpCorporation', ''),
             'manufacturer': item.get('manufacturer', ''),
             'importer': item.get('importer', ''),
-            'firstDate': item.get('firstDate', ''),
-            'lastDate': item.get('lastDate', '')   
+            'firstDate': format_api_date(item.get('firstDate', '')),
+            'lastDate': format_api_date(item.get('lastDate', ''))
         })
     return result
 
