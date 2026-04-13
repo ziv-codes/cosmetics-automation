@@ -1286,7 +1286,7 @@ def update_existing_sheet(spreadsheet_id=None):
             # Calculate range for this batch (A1 notation)
             start_row = i + 1  # +1 because A1 notation is 1-based
             end_row = min(i + batch_size, len(all_rows))
-            range_name = f"A{start_row}:G{end_row}"  # G is column 7 (nameCosmeticHeb to importer)
+            range_name = f"A{start_row}:I{end_row}"  # I is column 9 (nameCosmeticHeb to importer)
             
             print(f"  Writing {batch_name} ({len(batch)} rows) to range {range_name}...")
             
