@@ -845,6 +845,15 @@ def flatten_dict_for_sheet2(d, parent_key='', sep='_'):
             items.append((new_key, v))
     return dict(items)
 
+def protect_leading_zero(value):
+    """Prevents Google Sheets from stripping leading zeros in USER_ENTERED mode."""
+    if value is None:
+        return ""
+    val_str = str(value)
+    # If it's a string of numbers that starts with '0', add an apostrophe
+    if val_str.startswith('0') and val_str.isdigit():
+        return f"'{val_str}"
+    return value
 # ==================== GOOGLE SHEETS FUNCTIONS ====================
 
 def setup_google_sheets_client():
@@ -1307,7 +1316,7 @@ def update_existing_sheet(spreadsheet_id=None):
             print(f"  Writing {batch_name} ({len(batch)} rows) to range {range_name}...")
             
             try:
-                worksheet1.update(range_name, batch, value_input_option='RAW')
+                worksheet1.update(range_name, batch, value_input_option='USER_ENTERED')
                 logger.info(f"✓ {batch_name}: Successfully updated {len(batch)} rows at {range_name}")
             except Exception as e:
                 error_str = str(e)
@@ -1319,7 +1328,7 @@ def update_existing_sheet(spreadsheet_id=None):
                         print(f"⚠ {batch_name}: API error, retrying in {delay}s... (attempt {attempt + 1}/{SHEETS_MAX_RETRIES})")
                         time.sleep(delay)
                         try:
-                            worksheet1.update(range_name, batch, value_input_option='RAW')
+                            worksheet1.update(range_name, batch, value_input_option='USER_ENTERED')
                             logger.info(f"✓ {batch_name}: Successfully updated after retry")
                             break
                         except Exception as retry_e:
@@ -1455,7 +1464,7 @@ def update_existing_sheet(spreadsheet_id=None):
                 print(f"  Writing {batch_name} ({len(batch)} rows) to range {range_name}...")
                 
                 try:
-                    worksheet2.update(range_name, batch, value_input_option='RAW')
+                    worksheet2.update(range_name, batch, value_input_option='USER_ENTERED')
                     logger.info(f"✓ {batch_name}: Successfully updated {len(batch)} rows at {range_name}")
                 except Exception as e:
                     error_str = str(e)
@@ -1467,7 +1476,7 @@ def update_existing_sheet(spreadsheet_id=None):
                             print(f"⚠ {batch_name}: API error, retrying in {delay}s... (attempt {attempt + 1}/{SHEETS_MAX_RETRIES})")
                             time.sleep(delay)
                             try:
-                                worksheet2.update(range_name, batch, value_input_option='RAW')
+                                worksheet2.update(range_name, batch, value_input_option='USER_ENTERED')
                                 logger.info(f"✓ {batch_name}: Successfully updated after retry")
                                 break
                             except Exception as retry_e:
