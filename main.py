@@ -783,7 +783,7 @@ def extract_sheet1_fields(data_list):
         result.append({
             'nameCosmeticHeb': item.get('nameCosmeticHeb', ''),
             'nameCosmeticEng': item.get('nameCosmeticEng', ''),
-            'notificationCode': item.get('notificationCode', ''),
+            'notificationCode': protect_leading_zero(item.get('notificationCode', '')),
             'importTrack': item.get('importTrack', ''),
             'rpCorporation': item.get('rpCorporation', ''),
             'manufacturer': item.get('manufacturer', ''),
@@ -842,7 +842,7 @@ def flatten_dict_for_sheet2(d, parent_key='', sep='_'):
             # Convert list to string representation
             items.append((new_key, json.dumps(v, ensure_ascii=False)))
         else:
-            items.append((new_key, v))
+            items.append((new_key, protect_leading_zero(v)))
     return dict(items)
 
 def protect_leading_zero(value):
