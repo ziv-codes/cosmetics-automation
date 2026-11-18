@@ -32,6 +32,7 @@ ENABLE_LOGGING = True
 # ==================== SUPPLIERS CONFIGURATION ====================
 # Extracted from your provided table (Name: {item_id: מספר, type_id: סוג})
 TARGET_SUPPLIERS = {
+    'גלי עמיר בעמ': {'item_id': 34, 'type_id': 5},
     'רייס פרופשונל בעמ': {'item_id': 1423, 'type_id': 1},
     'רון ביוטיפול בע"מ': {'item_id': 3041, 'type_id': 1},
     'קיי.די.אל.אר בע"מ': {'item_id': 3525, 'type_id': 2},
